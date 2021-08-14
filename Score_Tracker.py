@@ -6,11 +6,34 @@ timer = 0
 global switch
 switch = 0
 
+global lr 
+lr = 0
+
 global team1ScoreTemp
 team1ScoreTemp = 0
 
 global team2ScoreTemp
 team2ScoreTemp = 0
+
+def incremTeam1():
+    global team1ScoreTemp
+    team1ScoreTemp+=1
+    team1Score.set(team1ScoreTemp)
+
+def decremTeam1():
+    global team1ScoreTemp
+    team1ScoreTemp-=1
+    team1Score.set(team1ScoreTemp)
+
+def incremTeam2():
+    global team2ScoreTemp
+    team2ScoreTemp+=1
+    team2Score.set(team2ScoreTemp)
+
+def decremTeam2():
+    global team2ScoreTemp
+    team2ScoreTemp-=1
+    team2Score.set(team2ScoreTemp)
 
 def resetTimer():
     global switch
@@ -100,6 +123,16 @@ lb.place(x = 800, y = 200, anchor = "center")    # IF YOU RESIZE THE WINDOW THEN
 team1ScoreLabel.place(x = 400, y = 650, anchor="center")   # x = X size / 4
 team2ScoreLabel.place(x = 1200, y = 650, anchor="center")   # x = X size * 3 / 4
 
+def swapScores():
+    global lr
+    lr = (lr + 1) % 2
+    if (lr == 1):
+        team1ScoreLabel.place(x = 1200, y = 650, anchor="center")   
+        team2ScoreLabel.place(x = 400, y = 650, anchor="center")
+    else:
+        team1ScoreLabel.place(x = 400, y = 650, anchor="center")
+        team2ScoreLabel.place(x = 1200, y = 650, anchor="center")
+
 controlsWindow = Tk()
 controlsWindow.title("Control Panel")
 
@@ -112,13 +145,20 @@ controlsWindow.title("Control Panel")
 bt1 = Button(controlsWindow,text="Start Timer",command=startStopwatch,font=("Courier 12 bold"))
 bt2 = Button(controlsWindow,text="Pause Timer",command=pauseTimer,font=("Courier 12 bold"))
 bt3 = Button(controlsWindow,text="Reset Timer",command=resetTimer,font=("Courier 12 bold"))
-bt3 = Button(controlsWindow,text="Add point to team 1", command=)
-
+bt4 = Button(controlsWindow,text="Add point to team 1", command=incremTeam1,font=("Courier 12 bold"))
+bt5 = Button(controlsWindow,text="Subtract point from team 1", command=decremTeam1,font=("Courier 12 bold"))
+bt6 = Button(controlsWindow,text="Add point to team 2", command=incremTeam2,font=("Courier 12 bold"))
+bt7 = Button(controlsWindow,text="Subtract point from team 2", command=decremTeam2,font=("Courier 12 bold"))
+bt8 = Button(controlsWindow,text="Swap team scores", command=swapScores, font=("Courier 12 bold"))
 
 bt1.pack()
 bt2.pack()
 bt3.pack()
-
+bt4.pack()
+bt5.pack()
+bt6.pack()
+bt7.pack()
+bt8.pack()
 
 controlsWindow.mainloop()
 mainWindow.mainloop()
