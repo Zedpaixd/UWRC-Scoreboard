@@ -1,4 +1,5 @@
 from tkinter import *
+import json
 
 global timer 
 timer = 0
@@ -15,25 +16,42 @@ team1ScoreTemp = 0
 global team2ScoreTemp
 team2ScoreTemp = 0
 
+def gameStatUpdater():
+    global team1ScoreTemp
+    global team2ScoreTemp
+
+    currentStats = {
+        "Time":stopw.get(),
+        "Team1score":team1ScoreTemp,
+        "Team2score":team2ScoreTemp
+        }
+
+    with open('game.json', 'w') as stats:
+        json.dump(currentStats, stats, indent = 0)
+
 def incremTeam1():
     global team1ScoreTemp
     team1ScoreTemp+=1
     team1Score.set(team1ScoreTemp)
+    gameStatUpdater()
 
 def decremTeam1():
     global team1ScoreTemp
     team1ScoreTemp-=1
     team1Score.set(team1ScoreTemp)
+    gameStatUpdater()
 
 def incremTeam2():
     global team2ScoreTemp
     team2ScoreTemp+=1
     team2Score.set(team2ScoreTemp)
+    gameStatUpdater()
 
 def decremTeam2():
     global team2ScoreTemp
     team2ScoreTemp-=1
     team2Score.set(team2ScoreTemp)
+    gameStatUpdater()
 
 def resetTimer():
     global switch
@@ -41,6 +59,7 @@ def resetTimer():
     global count
     count=1
     stopw.set('00:00')
+    gameStatUpdater()
         
 def startStopwatch():
     global switch
@@ -59,6 +78,7 @@ def pauseTimer():
     switch = 0
     global count
     count=1
+    gameStatUpdater()
 
 def timer():
 
@@ -91,6 +111,7 @@ def timer():
             
             
         stopw.set(d)
+        gameStatUpdater()
         if(count==0):
             mainWindow.after(930,start_timer)
 
@@ -159,6 +180,8 @@ bt5.pack()
 bt6.pack()
 bt7.pack()
 bt8.pack()
+
+
 
 controlsWindow.mainloop()
 mainWindow.mainloop()
