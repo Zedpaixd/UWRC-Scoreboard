@@ -66,10 +66,11 @@ def incremTeam1():
 
 def decremTeam1():
     global team1ScoreTemp
-    team1ScoreTemp-=1
-    team1ScoreVal = str(team1ScoreTemp)
-    team1Score.set(team1ScoreVal)
-    gameStatUpdater()
+    if (team1ScoreTemp > 0):
+        team1ScoreTemp-=1
+        team1ScoreVal = str(team1ScoreTemp)
+        team1Score.set(team1ScoreVal)
+        gameStatUpdater()
 
 def incremTeam2():
     global team2ScoreTemp
@@ -80,10 +81,11 @@ def incremTeam2():
 
 def decremTeam2():
     global team2ScoreTemp
-    team2ScoreTemp-=1
-    team2ScoreVal = str(team2ScoreTemp)
-    team2Score.set(team2ScoreVal)
-    gameStatUpdater()
+    if (team2ScoreTemp > 0):
+        team2ScoreTemp-=1
+        team2ScoreVal = str(team2ScoreTemp)
+        team2Score.set(team2ScoreVal)
+        gameStatUpdater()
 
 def resetTimer():
     global switch,count,resetMinutes,resetSeconds
@@ -205,11 +207,11 @@ team2Score.set(team2ScoreVal)
 
 team1ScoreLabel = Label(mainWindow,textvariable=team1Score)
 team1ScoreLabel.config(font=("Courier 240 bold"),bg="#180bd4",fg="#FFFFFF")  
-team1ScoreLabel.place(x = 400, y = 675, anchor="center")   # x = X size / 4
+team1ScoreLabel.place(x = 400, y = 685, anchor="center")   # x = X size / 4
 
 team2ScoreLabel = Label(mainWindow,textvariable=team2Score)
 team2ScoreLabel.config(font=("Courier 240 bold"),bg="#FFFFFF",fg="#000000")  
-team2ScoreLabel.place(x = 1200, y = 675, anchor="center")   # x = X size * 3 / 4
+team2ScoreLabel.place(x = 1200, y = 685, anchor="center")   # x = X size * 3 / 4
 
 startTimer = Button(controlsWindow,text="Start Timer",command=startStopwatch,font=("Courier 12 bold"))
 startTimer.place(x=15,y=10)
