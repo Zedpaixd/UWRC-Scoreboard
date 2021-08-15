@@ -49,7 +49,7 @@ def gameStatUpdater():
     global team1ScoreTemp,team2ScoreTemp
 
     currentStats = {
-        "Time":stopw.get(),
+        "Time":stopw.get().strip(),
         "Team1score":team1ScoreTemp,
         "Team2score":team2ScoreTemp
         }
