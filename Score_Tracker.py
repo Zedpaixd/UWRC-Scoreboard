@@ -162,15 +162,19 @@ def swapScores():
         team2ScoreLabel.place(x = 400, y = 650, anchor="center")
         team1ScoreTracking.place(x=590,y=310,anchor="center")
         team2ScoreTracking.place(x=450,y=310,anchor="center")
+        canvas1.place(x=800,y=0)
+        canvas2.place(x=-10,y=0)
     else:
         team1ScoreLabel.place(x = 400, y = 650, anchor="center")
         team2ScoreLabel.place(x = 1200, y = 650, anchor="center")
         team1ScoreTracking.place(x=450,y=310,anchor="center")
         team2ScoreTracking.place(x=590,y=310,anchor="center")
+        canvas1.place(x=-10,y=0)
+        canvas2.place(x=800,y=0)
 
 global mainWindow
 mainWindow=Tk()
-mainWindow.title("Program Name Here")
+mainWindow.title("UWR Scoreboard - © AAB")
 mainWindow.geometry("1600x900")
 mainWindow.resizable(False,False)
 
@@ -179,6 +183,12 @@ controlsWindow = Toplevel(mainWindow)
 controlsWindow.geometry("760x500")
 controlsWindow.title("Control Panel")
 controlsWindow.resizable(False,False)
+
+canvas1 = Canvas(width=810, height=900, bg='#180bd4')
+canvas1.place(x=-10,y=0)
+
+canvas2 = Canvas(width=810, height=900, bg='#FFFFFF')
+canvas2.place(x=800,y=0)
 
 stopw = StringVar()
 stopw.set("   15:00   ")
@@ -194,7 +204,7 @@ team2Score = StringVar()
 team2Score.set(team2ScoreVal)
 
 team1ScoreLabel = Label(mainWindow,textvariable=team1Score)
-team1ScoreLabel.config(font=("Courier 240 bold"),bg="#348EFF",fg="#FFFFFF")  
+team1ScoreLabel.config(font=("Courier 240 bold"),bg="#180bd4",fg="#FFFFFF")  
 team1ScoreLabel.place(x = 400, y = 675, anchor="center")   # x = X size / 4
 
 team2ScoreLabel = Label(mainWindow,textvariable=team2Score)
