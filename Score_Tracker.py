@@ -2,25 +2,15 @@ from tkinter import *
 import json
 from tkinter import messagebox
 
-global timer 
+global timer,switch,team1ScoreTemp,team2ScoreTemp,resetMinutes,resetSeconds
 timer = 0
-
-global switch
 switch = 0
-
-global lr 
 lr = 0
-
-global team1ScoreTemp
 team1ScoreTemp = 0
-
-global team2ScoreTemp
 team2ScoreTemp = 0
-
-global resetMinutes
+team1ScoreVal = str(team1ScoreTemp)
+team2ScoreVal = str(team2ScoreTemp)
 resetMinutes = 15
-
-global resetSeconds
 resetSeconds = 0
 
 def normalizeTime(resetMinutes,resetSeconds):
@@ -36,9 +26,27 @@ def normalizeTime(resetMinutes,resetSeconds):
     resetTime=resetMinutes+":"+resetSeconds
     return resetTime
 
+def submitValues():
+    try:
+        tempM = int(minutes.get())
+        tempS = int(seconds.get())
+    except:
+        messagebox.showerror("","Non integers have been inputted") 
+        tempM = 15
+        tempS = 0
+
+    if tempS > 59:
+        tempS = 59
+
+    global resetMinutes,resetSeconds
+    resetMinutes = tempM
+    resetSeconds = tempS
+
+    minutes.set("")
+    seconds.set("")
+
 def gameStatUpdater():
-    global team1ScoreTemp
-    global team2ScoreTemp
+    global team1ScoreTemp,team2ScoreTemp
 
     currentStats = {
         "Time":stopw.get(),
@@ -52,38 +60,39 @@ def gameStatUpdater():
 def incremTeam1():
     global team1ScoreTemp
     team1ScoreTemp+=1
-    team1Score.set(team1ScoreTemp)
+    team1ScoreVal = str(team1ScoreTemp)
+    team1Score.set(team1ScoreVal)
     gameStatUpdater()
 
 def decremTeam1():
     global team1ScoreTemp
     team1ScoreTemp-=1
-    team1Score.set(team1ScoreTemp)
+    team1ScoreVal = str(team1ScoreTemp)
+    team1Score.set(team1ScoreVal)
     gameStatUpdater()
 
 def incremTeam2():
     global team2ScoreTemp
     team2ScoreTemp+=1
-    team2Score.set(team2ScoreTemp)
+    team2ScoreVal = str(team2ScoreTemp)
+    team2Score.set(team2ScoreVal)
     gameStatUpdater()
 
 def decremTeam2():
     global team2ScoreTemp
     team2ScoreTemp-=1
-    team2Score.set(team2ScoreTemp)
+    team2ScoreVal = str(team2ScoreTemp)
+    team2Score.set(team2ScoreVal)
     gameStatUpdater()
 
 def resetTimer():
-    global switch
+    global switch,count,resetMinutes,resetSeconds
     switch = 0
-    global count
     count=1
-    global resetMinutes
-    global resetSeconds
 
     resetTime=normalizeTime(resetMinutes,resetSeconds)
 
-    stopw.set(resetTime)
+    stopw.set(" "*7 + resetTime + (" " * 7))
     gameStatUpdater()
         
 def startStopwatch():
@@ -99,9 +108,8 @@ def start_timer():
     timer()
 
 def pauseTimer():
-    global switch
+    global switch,count
     switch = 0
-    global count
     count=1
     gameStatUpdater()
 
@@ -111,7 +119,7 @@ def timer():
 
     if(count==0):
         d = str(stopw.get())
-        m,s = map(int,d.split(":"))
+        m,s = map(int,d.strip().split(":"))
             
         m=int(m)
         s= int(s)
@@ -138,7 +146,7 @@ def timer():
             s=str(0)+str(s)
         else:
             s=str(s)
-        d=m+":"+s
+        d="       "+m+":"+s+"       "
             
             
         stopw.set(d)
@@ -152,9 +160,13 @@ def swapScores():
     if (lr == 1):
         team1ScoreLabel.place(x = 1200, y = 650, anchor="center")   
         team2ScoreLabel.place(x = 400, y = 650, anchor="center")
+        team1ScoreTracking.place(x=590,y=310,anchor="center")
+        team2ScoreTracking.place(x=450,y=310,anchor="center")
     else:
         team1ScoreLabel.place(x = 400, y = 650, anchor="center")
         team2ScoreLabel.place(x = 1200, y = 650, anchor="center")
+        team1ScoreTracking.place(x=450,y=310,anchor="center")
+        team2ScoreTracking.place(x=590,y=310,anchor="center")
 
 global mainWindow
 mainWindow=Tk()
@@ -163,55 +175,84 @@ mainWindow.geometry("1600x900")
 mainWindow.resizable(False,False)
 
 global controlsWindow
-controlsWindow = Tk()
+controlsWindow = Toplevel(mainWindow)
 controlsWindow.geometry("760x500")
 controlsWindow.title("Control Panel")
+controlsWindow.resizable(False,False)
 
 stopw = StringVar()
-stopw.set("15:00")
+stopw.set("   15:00   ")
 
 lb = Label(mainWindow,textvariable=stopw)
-lb.config(font=("Courier 290 bold"))       
+lb.config(font=("Courier 300 bold"),bg="#000000",fg="#FFB400")       
+lb.place(x = 800, y = 220, anchor = "center")    # IF YOU RESIZE THE WINDOW THEN x = X size / 2    ALSO EDIT swapScores() IN THAT CASE
 
 team1Score = StringVar()
-team1Score.set(team1ScoreTemp)
+team1Score.set(team1ScoreVal)
 
 team2Score = StringVar()
-team2Score.set(team2ScoreTemp)
+team2Score.set(team2ScoreVal)
 
 team1ScoreLabel = Label(mainWindow,textvariable=team1Score)
-team1ScoreLabel.config(font=("Courier 190 bold"))  
+team1ScoreLabel.config(font=("Courier 240 bold"),bg="#348EFF",fg="#FFFFFF")  
+team1ScoreLabel.place(x = 400, y = 675, anchor="center")   # x = X size / 4
 
 team2ScoreLabel = Label(mainWindow,textvariable=team2Score)
-team2ScoreLabel.config(font=("Courier 190 bold"))  
-
-currentResetTime = Label(controlsWindow, text = "Current reset time:", font=("Courier 14 bold"))
-currentResetTime.place(x=260,y=140)
-
-lb.place(x = 800, y = 200, anchor = "center")    # IF YOU RESIZE THE WINDOW THEN x = X size / 2    ALSO EDIT swapScores() IN THAT CASE
-team1ScoreLabel.place(x = 400, y = 650, anchor="center")   # x = X size / 4
-team2ScoreLabel.place(x = 1200, y = 650, anchor="center")   # x = X size * 3 / 4
-
+team2ScoreLabel.config(font=("Courier 240 bold"),bg="#FFFFFF",fg="#000000")  
+team2ScoreLabel.place(x = 1200, y = 675, anchor="center")   # x = X size * 3 / 4
 
 startTimer = Button(controlsWindow,text="Start Timer",command=startStopwatch,font=("Courier 12 bold"))
-pauseTimer = Button(controlsWindow,text="Pause Timer",command=pauseTimer,font=("Courier 12 bold"))
-resetTimer = Button(controlsWindow,text="Reset Timer",command=resetTimer,font=("Courier 12 bold"))
-pointToT1 = Button(controlsWindow,text="Add point to team 1", command=incremTeam1,font=("Courier 12 bold"))
-minusPointToT1 = Button(controlsWindow,text="Subtract point from team 1", command=decremTeam1,font=("Courier 12 bold"))
-pointToT2 = Button(controlsWindow,text="Add point to team 2", command=incremTeam2,font=("Courier 12 bold"))
-minusPointToT2 = Button(controlsWindow,text="Subtract point from team 2", command=decremTeam2,font=("Courier 12 bold"))
-swapTeamScores = Button(controlsWindow,text="Swap team scores", command=swapScores, font=("Courier 12 bold"))
-
 startTimer.place(x=15,y=10)
+
+pauseTimer = Button(controlsWindow,text="Pause Timer",command=pauseTimer,font=("Courier 12 bold"))
 pauseTimer.place(x=15,y=50)
+
+resetTimer = Button(controlsWindow,text="Reset Timer",command=resetTimer,font=("Courier 12 bold"))
 resetTimer.place(x=15,y=90)
+
+pointToT1 = Button(controlsWindow,text="Add point to team 1", command=incremTeam1,font=("Courier 12 bold"))
 pointToT1.place(x=195,y=10)
+
+minusPointToT1 = Button(controlsWindow,text="Subtract point from team 1", command=decremTeam1,font=("Courier 12 bold"))
 minusPointToT1.place(x=165,y=50)
+
+pointToT2 = Button(controlsWindow,text="Add point to team 2", command=incremTeam2,font=("Courier 12 bold"))
 pointToT2.place(x=495,y=10)
+
+minusPointToT2 = Button(controlsWindow,text="Subtract point from team 2", command=decremTeam2,font=("Courier 12 bold"))
 minusPointToT2.place(x=465,y=50)
+
+swapTeamScores = Button(controlsWindow,text="Swap team scores", command=swapScores, font=("Courier 12 bold"))
 swapTeamScores.place(x=350,y=90)
 
+timerTracking = Label(controlsWindow, textvariable = stopw)
+timerTracking.config(font =("Courier 25 bold"))
+timerTracking.place(x=520,y=280, anchor="center")
 
+team1ScoreTracking = Label(controlsWindow,textvariable=team1Score)
+team1ScoreTracking.config(font=("Courier 20 bold"))  
+team1ScoreTracking.place(x=450,y=310,anchor="center")
+
+team2ScoreTracking = Label(controlsWindow,textvariable=team2Score)
+team2ScoreTracking.config(font=("Courier 20 bold"))  
+team2ScoreTracking.place(x=590,y=310,anchor="center")
+
+global minutes
+minutes=StringVar()
+minutesLabel = Label(controlsWindow, text = "Change reset minutes to:", font = ("Courier 12 bold"))
+minutesEntry = Entry(controlsWindow, textvariable=minutes, font = ("Courier 12 bold"))
+minutesLabel.place(x=15,y=230)
+minutesEntry.place(x=35,y=260)
+
+global seconds
+seconds=StringVar()
+secondsLabel = Label(controlsWindow, text = "Change reset seconds to:", font = ("Courier 12 bold"))
+secondsEntry = Entry(controlsWindow, textvariable=seconds, font = ("Courier 12 bold"))
+secondsLabel.place(x=15,y=300)
+secondsEntry.place(x=35,y=330)
+
+submitButton = Button(controlsWindow,text = "Submit", command = submitValues)
+submitButton.place(x=115,y=370)
 
 controlsWindow.mainloop()
 mainWindow.mainloop()
