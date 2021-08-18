@@ -214,6 +214,8 @@ def swapScores():
 
 def logInSubmit():
 
+    global submittedInfo
+
     websiteInput=website.get()
     usernameInput=username.get()
     passwordInput=password.get()
@@ -226,7 +228,7 @@ def logInSubmit():
     website.set("")
     username.set("")
     password.set("")
-    global submittedInfo
+   
     submittedInfo = 1
     logInWindow.destroy()
     time.sleep(2)
@@ -241,53 +243,39 @@ logInWindow.geometry("450x345")
 
 # website input box
 global website
-
 website=StringVar()
 
 websiteLabel = Label(logInWindow, text = 'Website:', font = ('Cambria',12,'bold'))
-
-websiteEntry=Entry(logInWindow, textvariable = website, font = ('Cambria',12,'normal'))  
-  
 websiteLabel.place(x = 180, y = 15)
 
-websiteEntry.place(x = 130, y = 45)
-
+websiteEntry=Entry(logInWindow, textvariable = website, font = ('Cambria',12,'normal'))  
+websiteEntry.place(x = 130, y = 45)  
 
 
 # Username input box
 global username
-
 username=StringVar()
 
 usernameLabel = Label(logInWindow, text = 'Username:', font=('Cambria',12, 'bold'))
-  
-usernameEntry = Entry(logInWindow, textvariable = username, font=('Cambria',12,'normal'))
-  
-usernameLabel.place(x = 180, y = 95)
+usernameLabel.place(x = 180, y = 95)  
 
-usernameEntry.place(x = 130, y = 125)
+usernameEntry = Entry(logInWindow, textvariable = username, font=('Cambria',12,'normal'))
+usernameEntry.place(x = 130, y = 125)  
 
 
 
 # Password input box
 global password
-
 password=StringVar()
 
 passwordLabel = Label(logInWindow, text = 'Password:', font = ('Cambria',12,'bold'))
-
-passwordEntry=Entry(logInWindow, textvariable = password, font = ('Cambria',12,'normal'), show = '*')
-
 passwordLabel.place(x = 180, y = 175)
 
+passwordEntry=Entry(logInWindow, textvariable = password, font = ('Cambria',12,'normal'), show = '*')
 passwordEntry.place(x = 130, y = 205)
 
-
-
 submitButton=Button(logInWindow, text = 'Submit', height = 1, width = 9, command = logInSubmit)
-
 submitButton.place(x = 180, y = 250)
-
 
 logInWindow.mainloop()
 
